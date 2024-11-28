@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -27,7 +28,11 @@ class TaskController extends Controller
      */
     public function create()
     {
-        return Inertia::render('CreateTask');
+        $users = User::all();
+        dd($users);
+        return Inertia::render('CreateTask' , [
+            'users' => $users
+        ]);
     }
 
     /**

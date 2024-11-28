@@ -31,4 +31,16 @@ class Task extends Model
     protected $casts = [
         'due_date' => 'date',
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'users_tasks', 'task_id', 'user_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+
 }

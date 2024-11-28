@@ -51,6 +51,16 @@ const closeModal = () => {
                             class="form-input mt-1 block w-full"></textarea>
                     </div>
 
+                    <div class="mb-2">
+                        <label for="users" class="block text-sm font-medium">Usuários</label>
+                        <select name="users[]" id="users" class="form-input mt-1 block w-full" multiple>
+                            @foreach ($users as $user)
+                            <option value="{{ $user->id }}">{{ $user -> name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
                     <div class="flex justify-end mt-4">
                         <button @click="closeModal" type="button" class="px-4 py-2 bg-gray-300 text-black rounded mr-2">
                             Cancel

@@ -16,7 +16,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all(); // Aqui você pode adicionar filtros por usuário, se necessário.
+        $tasks = Task::all();
         return Inertia::render('Dashboard', [
             'tasks' => $tasks,
         ]);
@@ -28,27 +28,31 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $users = User::all();
-        dd($users);
-        return Inertia::render('CreateTask' , [
-            'users' => $users
+        $users = User::all()->toArray();
+        return Inertia::render('Dashboard', [
+            'users' => $users,
         ]);
     }
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreTaskRequest $request)
     {
-        Task::create([
+
+        $task = Task::create([
             'title' => $request->title,
             'description' => $request->description,
-            'status' => $request->status ?? 'pending', // Status padrão como 'pending'
+            'status' => "pending",
             'due_date' => $request->due_date,
-            'created_by' => Auth::user()->id, // Associando ao usuário autenticado
+            'created_by' => Auth::user()->id,
         ]);
 
-        // Redireciona de volta para o dashboard com uma mensagem de sucesso
+        if ($request->has('users') && is_array($request->users)) {
+            $task->users()->attach($request->users);
+        }
+
         return redirect()->route('dashboard')->with('success', 'Task created successfully!');
     }
 

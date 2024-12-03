@@ -11,7 +11,7 @@ class StoreTaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->check();
+        return auth()->guard('web')->check();
     }
 
     /**
@@ -24,8 +24,8 @@ class StoreTaskRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'in:pending,in-progress,completed', // Validação para o campo "status"
-            'due_date' => 'nullable|date|after_or_equal:today', // Validação para "due_date"
+            'status' => 'in:pending,in-progress,completed',
+            'due_date' => 'nullable|date|after_or_equal:today',
         ];
     }
 }

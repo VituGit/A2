@@ -4,15 +4,17 @@ import { Head, router } from '@inertiajs/vue3';
 import Tasks from '@/Components/Tasks.vue';
 import CreateTask from '@/Components/CreateTask.vue';
 
-// Recebendo tarefas via props
 defineProps({
     tasks: {
         type: Array,
         default: () => [],
     },
+    users: {
+        type: Array,
+        default: () => [],
+    },
 });
 
-// Recarregar tarefas após criar uma nova
 const reloadTasks = () => {
     router.reload({ only: ['tasks'] });
 };
@@ -37,7 +39,7 @@ const reloadTasks = () => {
 
                         <!-- Formulário para criar tarefa -->
                          <div class="mt-4">
-                             <CreateTask @task-created="reloadTasks" />
+                             <CreateTask :users="users" @task-created="reloadTasks" />
                          </div>
                     </div>
                 </div>

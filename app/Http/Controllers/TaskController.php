@@ -16,8 +16,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
-        return Inertia::render('Dashboard', [
+        $tasks = Task::where('created_by', Auth::user()->id)->get();
+        return Inertia::render('Tasks/Index', [
             'tasks' => $tasks,
         ]);
     }
@@ -61,7 +61,11 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        $user = Auth::user();
+        $tasks = Task::where('created_by', $user->id)->get();
+        return Inertia::render('Dashboard', [
+            'tasks' => $tasks,
+        ]);
     }
 
     /**
@@ -69,7 +73,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+
     }
 
     /**

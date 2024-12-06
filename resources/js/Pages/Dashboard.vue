@@ -4,6 +4,7 @@ import { Head, router } from '@inertiajs/vue3';
 import Tasks from '@/Components/Tasks.vue';
 import CreateTask from '@/Components/CreateTask.vue';
 
+
 defineProps({
     tasks: {
         type: Array,
@@ -15,12 +16,14 @@ defineProps({
     },
 });
 
+
 const reloadTasks = () => {
     router.reload({ only: ['tasks'] });
 };
 </script>
 
 <template>
+
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
@@ -38,9 +41,9 @@ const reloadTasks = () => {
                         <Tasks :tasks="tasks" />
 
                         <!-- Formulário para criar tarefa -->
-                         <div class="mt-4">
-                             <CreateTask :users="users" @task-created="reloadTasks" />
-                         </div>
+                        <div class="mt-4">
+                            <CreateTask :users="users" @task-created="reloadTasks" />
+                        </div>
                     </div>
                 </div>
             </div>

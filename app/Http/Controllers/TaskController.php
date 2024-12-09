@@ -29,7 +29,7 @@ class TaskController extends Controller
     public function create()
     {
         $users = User::all()->toArray();
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Tasks/Create', [
             'users' => $users,
         ]);
     }

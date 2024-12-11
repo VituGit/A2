@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use App\Models\User;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -13,7 +16,10 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        $projects = Project::all();
+        return Inertia::render('Projects/Index', [
+            'projects' => $projects,
+        ]);
     }
 
     /**
@@ -21,7 +27,13 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        if( Auth::user()->role !== 'admin') {
+            abort(403, 'Acesso negado. Apenas administradores podem criar projetos.');
+        }
+        $users = User::all()->toArray();
+        return Inertia::render('Projects/Create', [
+            'users' => $users,
+        ]);
     }
 
     /**

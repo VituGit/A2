@@ -34,10 +34,20 @@ const showingNavigationDropdown = ref(false);
                                 class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                             >
                                 <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
+                                    :href="route('tasks.index')"
+                                    :active="route().current('tasks.index')"
                                 >
-                                    Tasks
+                                    My Tasks
+                                </NavLink>
+                            </div>
+                            <div
+                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                            >
+                                <NavLink
+                                    :href="route('tasks.create')"
+                                    :active="route().current('tasks.create')"
+                                >
+                                    Create Task
                                 </NavLink>
                             </div>
                         </div>

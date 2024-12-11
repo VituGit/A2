@@ -16,7 +16,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::where('created_by', Auth::user()->id)->get();
+        $tasks = Auth::user()->tasks;
         return Inertia::render('Tasks/Index', [
             'tasks' => $tasks,
         ]);
@@ -40,11 +40,10 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-
         $task = Task::create([
             'title' => $request->title,
             'description' => $request->description,
-            'status' => "pending",
+            'status' => 'pending',
             'due_date' => $request->due_date,
             'created_by' => Auth::user()->id,
         ]);
@@ -53,16 +52,16 @@ class TaskController extends Controller
             $task->users()->attach($request->users);
         }
 
-        return redirect()->route('dashboard')->with('success', 'Task created successfully!');
+        return redirect()->route('dashboard');
     }
+
 
     /**
      * Display the specified resource.
      */
     public function show(Task $task)
     {
-        $user = Auth::user();
-        $tasks = Task::where('created_by', $user->id)->get();
+        $tasks = Task::where('created_by', Auth::user()->id)->get();
         return Inertia::render('Dashboard', [
             'tasks' => $tasks,
         ]);
@@ -73,22 +72,51 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
+        // Verifica se a tarefa pertence ao usuário autenticado
+        if ($task->created_by !== Auth::id()) {
+            return redirect()->route('tasks.index')->with('error', 'Você não tem permissão para editar esta tarefa.');
+        }
 
+        // Retorna a view de edição com os dados da tarefa
+        return Inertia::render('Tasks/Edit', [
+            'task' => $task
+        ]);
     }
-
     /**
      * Update the specified resource in storage.
      */
+    // TaskController.php
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+        // Verifica se a tarefa pertence ao usuário autenticado
+        if ($task->created_by !== Auth::id()) {
+            return redirect()->route('tasks.index')->with('error', 'Você não tem permissão para atualizar esta tarefa.');
+        }
+
+        $task->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'status' => $request->status,
+            'due_date' => $request->due_date,
+        ]);
+
+        // Retorna a resposta de sucesso
+        return redirect()->route('tasks.index')->with('success', 'Tarefa atualizada com sucesso!');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Task $task)
     {
-        //
+        // Verifica se a tarefa pertence ao usuário autenticado
+        if ($task->created_by !== Auth::id()) {
+            return redirect()->route('tasks.index')->with('error', 'Você não tem permissão para excluir esta tarefa.');
+        }
+
+        $task->delete();  // Deleta a tarefa
+
+        return redirect()->route('tasks.index')->with('success', 'Tarefa excluída com sucesso!');
     }
 }

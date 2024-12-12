@@ -16,6 +16,14 @@ const description = ref(props.task.description);
 const status = ref(props.task.status);
 const due_date = ref(props.task.due_date);
 
+onMounted(() => {
+    // Garantir que a data de vencimento venha no formato correto (YYYY-MM-DD)
+    if (props.task.due_date) {
+        // Passar a data diretamente sem manipulação
+        due_date.value = props.task.due_date.split('T')[0];  // Extrai apenas a parte da data (YYYY-MM-DD)
+    }
+});
+
 const submitForm = () => {
     Inertia.put(`/tasks/${props.task.id}`, {
         title: title.value,
@@ -24,7 +32,6 @@ const submitForm = () => {
         due_date: due_date.value,
     });
 };
-
 </script>
 
 <template>
@@ -58,7 +65,7 @@ const submitForm = () => {
 
                             <div class="mb-4">
                                 <label for="due_date" class="block text-sm font-medium text-gray-700">Data de Vencimento</label>
-                                <input type="datetime-local" id="due_date" v-model="due_date" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                                <input type="date" id="due_date" v-model="due_date" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
                             </div>
 
                             <div class="flex justify-end">
